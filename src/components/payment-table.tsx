@@ -66,7 +66,6 @@ export default function PaymentTable({ members, payments }: PaymentTableProps) {
             ))}
 
             <th className="p-3 text-right font-semibold">Total Paid</th>
-            <th className="p-3 text-right font-semibold">Balance</th>
           </tr>
         </thead>
 
@@ -78,11 +77,6 @@ export default function PaymentTable({ members, payments }: PaymentTableProps) {
 
             const totalPaid = memberPayments.reduce(
               (sum, p) => sum + Number(p.amount_paid),
-              0
-            );
-
-            const balance = memberPayments.reduce(
-              (sum, p) => sum + (Number(p.amount_due) - Number(p.amount_paid)),
               0
             );
 
@@ -107,7 +101,7 @@ export default function PaymentTable({ members, payments }: PaymentTableProps) {
                           payment?.payment_status
                         )}`}
                       >
-                        {payment?.payment_status ?? "-"}
+                        {payment ? `$${Number(payment.amount_paid ?? 0).toFixed(2)}` : "-"}
                       </span>
                     </td>
                   );
@@ -115,10 +109,6 @@ export default function PaymentTable({ members, payments }: PaymentTableProps) {
 
                 <td className="p-3 text-right text-slate-900 dark:text-slate-100">
                   ${totalPaid.toFixed(2)}
-                </td>
-
-                <td className="p-3 text-right text-slate-900 dark:text-slate-100">
-                  ${balance.toFixed(2)}
                 </td>
               </tr>
             );
@@ -137,8 +127,6 @@ export default function PaymentTable({ members, payments }: PaymentTableProps) {
             ))}
 
             <td className="p-3 text-right">${totalCollected.toFixed(2)}</td>
-
-            <td className="p-3 text-right">—</td>
           </tr>
         </tfoot>
       </table>

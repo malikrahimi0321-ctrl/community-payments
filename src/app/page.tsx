@@ -1,35 +1,27 @@
 import Link from "next/link";
-import { getDashboardStats, getRecentPayments } from "@/lib/queries";
+import { getDashboardStats } from "@/lib/queries";
 
-type RecentPayment = {
-  id: string;
-  amount_paid: number;
-  payment_status: string;
-  payment_date: string | null;
-  members?:
-    | { full_name?: string | null }[]
-    | { full_name?: string | null }
-    | null;
-};
+const monthLabels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export default async function HomePage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
 
-  const [stats, recentPayments] = await Promise.all([
-    getDashboardStats(year, month),
-    getRecentPayments(3),
-  ]);
-
-  const typedRecentPayments = recentPayments as RecentPayment[];
-
-  const realPayments = typedRecentPayments.filter(
-    (payment) =>
-      Number(payment.amount_paid) > 0 &&
-      payment.payment_status !== "unpaid" &&
-      payment.payment_date
-  );
+  const stats = await getDashboardStats(year, month);
 
   return (
     <main className="min-h-screen bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white">
@@ -188,53 +180,6 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-2xl bg-white p-4 shadow-sm dark:bg-slate-900">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Recent Payments</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Latest updates
-                    </p>
-                  </div>
-
-                  <div className="mt-4 space-y-3">
-                    {realPayments.length === 0 ? (
-                      <div className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                        No recent payments found.
-                      </div>
-                    ) : (
-                      realPayments.map((payment) => (
-                        <div
-                          key={payment.id}
-                          className="flex items-center justify-between rounded-xl border border-slate-200 px-3 py-3 dark:border-slate-800"
-                        >
-                          <div className="flex items-center gap-3">
-                            <span
-                              className={`h-2.5 w-2.5 rounded-full ${
-                                payment.payment_status === "paid"
-                                  ? "bg-emerald-500"
-                                  : "bg-amber-500"
-                              }`}
-                            />
-                            <div>
-                              <p className="text-sm font-medium">
-                                {Array.isArray(payment.members)
-                                  ? payment.members[0]?.full_name ?? "Unknown Member"
-                                  : payment.members?.full_name ?? "Unknown Member"}
-                              </p>
-                              <p className="text-xs text-slate-500 dark:text-slate-400">
-                                ${Number(payment.amount_paid).toFixed(2)}
-                              </p>
-                            </div>
-                          </div>
-                          <span className="text-xs text-slate-400">
-                            {payment.payment_date}
-                          </span>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-
                 <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-3">
                   <div className="rounded-xl bg-white p-3 text-center shadow-sm dark:bg-slate-900">
                     <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -267,7 +212,7 @@ export default async function HomePage() {
                       Month
                     </p>
                     <p className="mt-2 text-sm font-bold">
-                      {now.toLocaleString("default", { month: "short" })}
+                      {monthLabels[month - 1]}
                     </p>
                   </div>
                 </div>
@@ -278,7 +223,7 @@ export default async function HomePage() {
       </section>
 
       <footer className="border-t border-slate-200 bg-white/70 py-6 text-center text-sm text-slate-500 backdrop-blur dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-400">
-        © {new Date().getFullYear()} Turkmen Cultural Center
+        © {year} Turkmen Cultural Center
       </footer>
     </main>
   );

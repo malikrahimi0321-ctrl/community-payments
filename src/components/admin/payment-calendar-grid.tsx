@@ -9,6 +9,21 @@ type Payment = {
   payment_status: "paid" | "partial" | "unpaid";
 };
 
+const monthLabels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 export default function PaymentCalendarGrid({
   members,
   payments,
@@ -35,11 +50,9 @@ export default function PaymentCalendarGrid({
           <thead>
             <tr className="border-b border-slate-200 text-left text-slate-500">
               <th className="pb-3 pr-4 font-medium">Member</th>
-              {Array.from({ length: 12 }, (_, i) => (
-                <th key={i} className="px-3 text-center">
-                  {new Date(0, i).toLocaleString("default", {
-                    month: "short",
-                  })}
+              {monthLabels.map((label) => (
+                <th key={label} className="px-3 text-center">
+                  {label}
                 </th>
               ))}
             </tr>

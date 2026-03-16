@@ -11,6 +11,8 @@ type Member = {
 
 type RecordPaymentFormProps = {
   members: Member[];
+  initialMonth: number;
+  initialYear: number;
 };
 
 const months = [
@@ -30,15 +32,15 @@ const months = [
 
 export default function RecordPaymentForm({
   members,
+  initialMonth,
+  initialYear,
 }: RecordPaymentFormProps) {
   const supabase = createClient();
   const router = useRouter();
 
-  const currentYear = new Date().getFullYear();
-
   const [memberId, setMemberId] = useState("");
-  const [month, setMonth] = useState(String(new Date().getMonth() + 1));
-  const [year, setYear] = useState(String(currentYear));
+  const [month, setMonth] = useState(String(initialMonth));
+  const [year, setYear] = useState(String(initialYear));
   const [amountDue, setAmountDue] = useState("100");
   const [amountPaid, setAmountPaid] = useState("");
   const [paymentDate, setPaymentDate] = useState("");

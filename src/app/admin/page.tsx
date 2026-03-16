@@ -74,7 +74,11 @@ export default async function AdminPage() {
               </div>
 
               <div id="record-payment-form">
-                <RecordPaymentForm members={members} />
+                <RecordPaymentForm
+                  members={members}
+                  initialMonth={month}
+                  initialYear={year}
+                />
               </div>
 
               <div id="update-payment-form">

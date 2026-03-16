@@ -1,7 +1,6 @@
 import {
   getMembers,
   getPayments,
-  getRecentPayments,
   getDashboardStats,
 } from "@/lib/queries";
 
@@ -10,7 +9,6 @@ import PageTitle from "@/components/site/page-title";
 import SectionCard from "@/components/site/section-card";
 import StatCard from "@/components/site/stat-card";
 import PaymentTable from "@/components/payment-table";
-import RecentPayments from "@/components/recent-payments";
 import AlertsPanel from "@/components/alerts-panel";
 
 export default async function DashboardPage() {
@@ -18,11 +16,10 @@ export default async function DashboardPage() {
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
 
-  const [stats, members, payments, recentPayments] = await Promise.all([
+  const [stats, members, payments] = await Promise.all([
     getDashboardStats(year, month),
     getMembers(),
     getPayments(year),
-    getRecentPayments(5),
   ]);
 
   return (
@@ -48,11 +45,7 @@ export default async function DashboardPage() {
         </SectionCard>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <SectionCard title="Recent Payments">
-          <RecentPayments payments={recentPayments} />
-        </SectionCard>
-
+      <div className="mt-6">
         <SectionCard title="Alerts">
           <AlertsPanel unpaidThisMonth={stats.unpaidThisMonth} />
         </SectionCard>
