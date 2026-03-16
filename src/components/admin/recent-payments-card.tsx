@@ -3,7 +3,10 @@ type RecentPayment = {
   amount_paid: number;
   payment_status: string;
   payment_date: string | null;
-  members: { full_name: string | null }[] | null;
+  members:
+    | { full_name: string | null }[]
+    | { full_name: string | null }
+    | null;
 };
 
 type RecentPaymentsProps = {
@@ -13,6 +16,14 @@ type RecentPaymentsProps = {
 export default function RecentPaymentsCard({
   payments,
 }: RecentPaymentsProps) {
+  function getMemberName(payment: RecentPayment) {
+    if (Array.isArray(payment.members)) {
+      return payment.members[0]?.full_name ?? "Unknown Member";
+    }
+
+    return payment.members?.full_name ?? "Unknown Member";
+  }
+
   const realPayments = payments.filter(
     (payment) =>
       Number(payment.amount_paid) > 0 &&
@@ -35,9 +46,7 @@ export default function RecentPaymentsCard({
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="font-semibold">
-                    {payment.members?.[0]?.full_name ?? "Unknown Member"}
-                  </div>
+                  <div className="font-semibold">{getMemberName(payment)}</div>
                   <div className="mt-1 text-sm text-slate-500">
                     {payment.payment_status}
                   </div>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
@@ -6,13 +7,11 @@ import DashboardStats from "@/components/admin/dashboard-stats";
 import MemberManagementTable from "@/components/admin/member-management-table";
 import RecentPaymentsCard from "@/components/admin/recent-payments-card";
 import AlertsCard from "@/components/admin/alerts-card";
-import PaymentCalendarGrid from "@/components/admin/payment-calendar-grid";
+import ExportReportButton from "@/components/admin/export-report-button";
 import MemberSearch from "@/components/admin/member-search";
-import AddMemberForm from "@/components/admin/add-member-form";
-import RecordPaymentForm from "@/components/admin/record-payment-form";
-import UpdatePaymentForm from "@/components/admin/update-payment-form";
 
 import {
+  getAllPayments,
   getMembers,
   getPayments,
   getRecentPayments,
@@ -34,17 +33,23 @@ export default async function AdminPage() {
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
 
-  const [stats, members, payments, recentPayments] = await Promise.all([
+  const [stats, members, payments, allPayments, recentPayments] = await Promise.all([
     getDashboardStats(year, month),
     getMembers(),
     getPayments(year),
+    getAllPayments(),
     getRecentPayments(5),
   ]);
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900">
       <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[260px_1fr]">
-        <AdminSidebar />
+        <AdminSidebar
+          members={members}
+          payments={payments}
+          initialMonth={month}
+          initialYear={year}
+        />
 
         <main className="p-4 md:p-6">
           <div className="mx-auto max-w-7xl space-y-6">
@@ -59,31 +64,27 @@ export default async function AdminPage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <button className="rounded-2xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white">
-                  Export Report
-                </button>
+                <Link
+                  href="/"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  Main Page
+                </Link>
+
+                <Link
+                  href="/dashboard"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  Public Dashboard
+                </Link>
+
+                <ExportReportButton members={members} payments={allPayments} />
               </div>
             </header>
 
             <DashboardStats stats={stats} />
 
-              <MemberSearch members={members} payments={payments} />
-
-              <div id="add-member-form">
-                <AddMemberForm />
-              </div>
-
-              <div id="record-payment-form">
-                <RecordPaymentForm
-                  members={members}
-                  initialMonth={month}
-                  initialYear={year}
-                />
-              </div>
-
-              <div id="update-payment-form">
-                <UpdatePaymentForm members={members} payments={payments} />
-              </div>
+            <MemberSearch members={members} payments={payments} />
 
             <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_0.9fr]">
               <MemberManagementTable members={members} />
@@ -93,8 +94,6 @@ export default async function AdminPage() {
                 <AlertsCard unpaidThisMonth={stats.unpaidThisMonth} />
               </div>
             </section>
-
-            <PaymentCalendarGrid members={members} payments={payments} />
           </div>
         </main>
       </div>

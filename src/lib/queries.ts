@@ -26,6 +26,20 @@ export async function getPayments(year: number) {
   return data ?? [];
 }
 
+export async function getAllPayments() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("payments")
+    .select("*")
+    .order("year", { ascending: false })
+    .order("month", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data ?? [];
+}
+
 export async function getRecentPayments(limit = 10) {
   const supabase = await createClient();
 

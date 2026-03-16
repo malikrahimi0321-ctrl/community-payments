@@ -1,7 +1,41 @@
 import Link from "next/link";
+import AdminQuickActions from "./admin-quick-actions";
 import LogoutButton from "./logout-button";
 
-export default function AdminSidebar() {
+type Member = {
+  id: string;
+  full_name: string;
+  phone?: string | null;
+  email?: string | null;
+  status?: string | null;
+  notes?: string | null;
+};
+
+type Payment = {
+  id: string;
+  member_id: string;
+  month: number;
+  year: number;
+  amount_due: number;
+  amount_paid: number;
+  payment_status: "paid" | "partial" | "unpaid";
+  payment_date: string | null;
+  note?: string | null;
+};
+
+type AdminSidebarProps = {
+  members: Member[];
+  payments: Payment[];
+  initialMonth: number;
+  initialYear: number;
+};
+
+export default function AdminSidebar({
+  members,
+  payments,
+  initialMonth,
+  initialYear,
+}: AdminSidebarProps) {
   const items = [
     { label: "Dashboard", href: "/admin" },
     { label: "Members", href: "/members" },
@@ -37,29 +71,12 @@ export default function AdminSidebar() {
         <div className="mt-8 rounded-2xl bg-slate-50 p-4">
           <div className="text-sm font-semibold">Quick Actions</div>
 
-          <div className="mt-3 space-y-2">
-            
-              <a
-                href="#add-member-form"
-                className="block w-full rounded-xl bg-slate-900 px-3 py-2 text-center text-sm font-medium text-white"
-              >
-                Add Member
-              </a>
-            
-              <a
-                href="#record-payment-form"
-                className="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-center text-sm font-medium text-slate-700"
-              >
-                Record Payment
-              </a>
-
-              <a
-                href="#update-payment-form"
-                className="block w-full rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-center text-sm font-medium text-amber-700"
-              >
-                Update Payment
-              </a>
-          </div>
+          <AdminQuickActions
+            members={members}
+            payments={payments}
+            initialMonth={initialMonth}
+            initialYear={initialYear}
+          />
 
           <div className="mt-4">
             <LogoutButton />

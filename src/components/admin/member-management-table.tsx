@@ -22,9 +22,9 @@ export default function MemberManagementTable({
         </div>
       </div>
 
-      <div className="mt-5 overflow-x-auto">
+      <div className="mt-5 max-h-[36rem] overflow-auto">
         <table className="min-w-full text-sm">
-          <thead>
+          <thead className="sticky top-0 bg-white">
             <tr className="border-b border-slate-200 text-left text-slate-500">
               <th className="pb-3 pr-4 font-medium">First Name</th>
               <th className="pb-3 pr-4 font-medium">Last Name</th>
