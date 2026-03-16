@@ -165,31 +165,31 @@ export default function PaymentTable({
 
       <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-slate-950 text-white shadow-xl">
         <div className="max-h-[70vh] overflow-auto overscroll-contain">
-          <table className="min-w-[1100px] border-collapse text-sm">
+          <table className="min-w-[980px] border-collapse text-xs sm:min-w-[1100px] sm:text-sm">
             <colgroup>
-              <col className="w-[170px]" />
+              <col className="w-[110px] sm:w-[170px]" />
               {months.map((month) => (
-                <col key={month} className="w-[88px]" />
+                <col key={month} className="w-[72px] sm:w-[88px]" />
               ))}
-              <col className="w-[120px]" />
+              <col className="w-[96px] sm:w-[120px]" />
             </colgroup>
 
             <thead>
               <tr className="bg-slate-800/95 text-slate-100">
-                <th className="sticky left-0 top-0 z-20 bg-slate-800 px-5 py-5 text-left text-base font-semibold">
+                <th className="sticky left-0 top-0 z-20 bg-slate-800 px-3 py-3 text-left text-sm font-semibold sm:px-5 sm:py-5 sm:text-base">
                   Member
                 </th>
 
                 {months.map((month) => (
                   <th
                     key={month}
-                    className="sticky top-0 z-10 bg-slate-800 px-4 py-5 text-center text-base font-semibold"
+                    className="sticky top-0 z-10 bg-slate-800 px-2 py-3 text-center text-sm font-semibold sm:px-4 sm:py-5 sm:text-base"
                   >
                     {month}
                   </th>
                 ))}
 
-                <th className="sticky top-0 z-10 bg-slate-800 px-5 py-5 text-right text-base font-semibold">
+                <th className="sticky top-0 z-10 bg-slate-800 px-3 py-3 text-right text-sm font-semibold sm:px-5 sm:py-5 sm:text-base">
                   Total Paid
                 </th>
               </tr>
@@ -209,8 +209,8 @@ export default function PaymentTable({
                     key={member.id}
                     className="border-t border-slate-800 text-slate-100"
                   >
-                    <td className="sticky left-0 bg-slate-900 px-4 py-5 text-left text-lg font-medium">
-                      <span className="block max-w-[140px] whitespace-normal">
+                    <td className="sticky left-0 bg-slate-900 px-2 py-4 text-left text-sm font-medium sm:px-4 sm:py-5 sm:text-lg">
+                      <span className="block max-w-[92px] whitespace-normal sm:max-w-[140px]">
                         {member.full_name}
                       </span>
                     </td>
@@ -222,10 +222,10 @@ export default function PaymentTable({
                       return (
                         <td
                           key={monthNum}
-                          className="px-3 py-5 text-center"
+                          className="px-2 py-4 text-center sm:px-3 sm:py-5"
                         >
                           <span
-                            className={`inline-flex min-w-16 justify-center rounded-full px-3 py-1.5 font-semibold ${getCellStyles(
+                            className={`inline-flex min-w-12 justify-center rounded-full px-2 py-1 text-xs font-semibold sm:min-w-16 sm:px-3 sm:py-1.5 sm:text-sm ${getCellStyles(
                               payment,
                               isCurrentMonth
                             )}`}
@@ -238,7 +238,7 @@ export default function PaymentTable({
                       );
                     })}
 
-                    <td className="px-5 py-5 text-right text-xl font-semibold text-slate-100">
+                    <td className="px-3 py-4 text-right text-base font-semibold text-slate-100 sm:px-5 sm:py-5 sm:text-xl">
                       ${totalPaid.toFixed(2)}
                     </td>
                   </tr>
@@ -248,14 +248,14 @@ export default function PaymentTable({
 
             <tfoot>
               <tr className="border-t border-slate-800 bg-slate-900/80">
-                <td className="sticky left-0 bg-slate-900 px-5 py-5 text-left text-base font-semibold text-slate-200">
+                <td className="sticky left-0 bg-slate-900 px-3 py-4 text-left text-sm font-semibold text-slate-200 sm:px-5 sm:py-5 sm:text-base">
                   Monthly Total
                 </td>
 
                 {monthlyTotals.map((total, index) => (
-                  <td key={months[index]} className="px-3 py-5 text-center">
+                  <td key={months[index]} className="px-2 py-4 text-center sm:px-3 sm:py-5">
                     <span
-                      className={`inline-flex min-w-16 justify-center rounded-full px-3 py-1.5 text-sm font-semibold ${
+                      className={`inline-flex min-w-12 justify-center rounded-full px-2 py-1 text-xs font-semibold sm:min-w-16 sm:px-3 sm:py-1.5 sm:text-sm ${
                         index + 1 === currentMonth
                           ? "bg-cyan-100 text-cyan-800"
                           : "bg-slate-800 text-slate-100"
@@ -266,7 +266,7 @@ export default function PaymentTable({
                   </td>
                 ))}
 
-                <td className="px-5 py-5 text-right text-xl font-semibold text-white">
+                <td className="px-3 py-4 text-right text-base font-semibold text-white sm:px-5 sm:py-5 sm:text-xl">
                   ${totalCollected.toFixed(2)}
                 </td>
               </tr>
